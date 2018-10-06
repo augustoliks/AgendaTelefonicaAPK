@@ -15,10 +15,13 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
         String[] alunos ={"Daniel","Ronaldo","Jeferson","Felipe"};
 
-        ListView listaAlunos = (ListView) findViewById(R.id.lista_alunos); // Pega a instancia do .xml em me momoria, e obtem a instancia pelo id do atributo listView
+        //Recebe uma instancia de um atributo view e converte em ListView
+        ListView listaAlunos = (ListView) findViewById(R.id.lista_alunos);
 
+        //Pega um array de string e adapata de tal forma que possa ser compativel com o .XML
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos);
 
+        //Adiciona na instancia do .XML o conteudo do adaptado
         listaAlunos.setAdapter(adapter);
 
     }
