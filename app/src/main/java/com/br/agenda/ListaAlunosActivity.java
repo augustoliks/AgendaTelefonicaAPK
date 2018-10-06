@@ -32,7 +32,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
         listaAlunos.setAdapter(adapter);
 
 
-        Button botao = (Button) findViewById(R.id.lista_alunos_botao);
+        Button botao = (Button) findViewById(R.id.novo_aluno);
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
