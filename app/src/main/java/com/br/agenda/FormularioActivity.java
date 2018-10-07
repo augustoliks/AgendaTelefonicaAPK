@@ -8,11 +8,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.br.agenda.api.service.ContactServiceCaracteristics;
+import com.br.agenda.core.service.ContactService;
 
 import java.util.BitSet;
 
 public class FormularioActivity extends AppCompatActivity {
+
+    ContactServiceCaracteristics contactService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,13 @@ public class FormularioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { // Metodo que gerencia o listener de click de botao
         switch (item.getItemId()) {         //verifica o que foi clicado
             case R.id.menu_formulario_ok:   //se for o menu_formulario
-                Toast.makeText(FormularioActivity.this, "Aluno Salvo", Toast.LENGTH_LONG).show(); //Criar um popup
+
+                contactService = new ContactService(this);
+
+                Toast.makeText(FormularioActivity.this,
+                        "Aluno " + contactService.getContact().getName() + " Salvo",
+                        Toast.LENGTH_LONG).show(); //Criar um popup
+
                 finish();   //Finaliza a instancia
                 break;
         }
