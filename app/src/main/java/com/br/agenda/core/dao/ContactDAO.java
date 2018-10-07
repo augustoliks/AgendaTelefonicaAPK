@@ -57,10 +57,12 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
     @NonNull
     private ContentValues getContentValues(Contact contact) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("nome", contact.getName());
+
+         contentValues.put("nome", contact.getName());
         contentValues.put("endereco", contact.getAddress());
         contentValues.put("telefone", contact.getTelephoneNumber());
         contentValues.put("site", contact.getSite());
+
         return contentValues;
     }
 
@@ -100,9 +102,9 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
     public void update(Contact contact) {
         SQLiteDatabase db = getWritableDatabase();
 
-        String []params = {contact.getId().toString()};
-
         ContentValues contentValues = getContentValues(contact);
+
+        String []params = {contact.getId().toString()};
 
         db.update("Contato", contentValues,"id = ?", params);
 

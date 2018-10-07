@@ -1,24 +1,20 @@
-package com.br.agenda;
+package com.br.agenda.view;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.br.agenda.api.dao.ContactDAOCaracteristics;
+import com.br.agenda.R;
 import com.br.agenda.api.model.Contact;
 import com.br.agenda.api.service.ContactServiceCaracteristics;
-import com.br.agenda.core.dao.ContactDAO;
 import com.br.agenda.core.service.ContactService;
 
 import java.util.List;
