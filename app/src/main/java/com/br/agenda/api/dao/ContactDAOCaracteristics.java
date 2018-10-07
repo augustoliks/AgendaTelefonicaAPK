@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ContactDAOCaracteristics {
     public boolean insert(Contact contact);
-    public List<Contact> readAllContacts();
-
+    public List<Contact> read();
+    public void update(Contact contact);
+    public void delete(Contact contact);
 }

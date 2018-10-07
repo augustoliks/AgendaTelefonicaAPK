@@ -1,5 +1,6 @@
 package com.br.agenda.core.service;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.widget.EditText;
 
@@ -23,19 +24,33 @@ public class ContactService implements ContactServiceCaracteristics {
     @Override
     public List<Contact> getAllContacts() {
         ContactDAO contactDAO = new ContactDAO(this.context);
-        List<Contact> contacts = contactDAO.readAllContacts();
+        List<Contact> contacts = contactDAO.read();
         contactDAO.close();
         return contacts;
     }
 
     @Override
-    public boolean insertNewContact(Contact contact) {
+    public void insertNewContact(Contact contact) {
 
         ContactDAO contactDAO = new ContactDAO(this.context);
         contactDAO.insert(contact);
         contactDAO.close();
 
-        return true;
+    }
+
+    @Override
+    public void deleteContact(Contact contact) {
+        ContactDAO contactDAO = new ContactDAO(this.context);
+        contactDAO.delete(contact);
+        contactDAO.close();
+    }
+
+    @Override
+    public void updateContact(Contact contact) {
+        ContactDAO contactDAO = new ContactDAO(this.context);
+        contactDAO.update(contact);
+        contactDAO.close();
+
     }
 
 }

@@ -3,9 +3,12 @@ package com.br.agenda;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,25 +24,30 @@ import com.br.agenda.core.service.ContactService;
 import java.util.List;
 
 public class ListaAlunosActivity extends AppCompatActivity {
+    private ListView listaAlunos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_alunos);
 
-        ContactServiceCaracteristics contactServiceImpl = new ContactService(this);
+        listaAlunos = (ListView) findViewById(R.id.lista_alunos);
 
-        List<Contact> contacts = contactServiceImpl.getAllContacts();
+        listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contact contact = (Contact) listaAlunos.getItemAtPosition(position);
+                contact.getName();
+                Toast.makeText(ListaAlunosActivity.this, "Aluno " + contact.getName() + " clicado!", Toast.LENGTH_SHORT).show();
 
-        //Recebe uma instancia de um atributo view e converte em ListView
-        ListView listaAlunos = (ListView) findViewById(R.id.lista_alunos);
+                Intent intent = new Intent(ListaAlunosActivity.this, FormularioActivity.class);
 
-        //Pega um array de string e adapata de tal forma que possa ser compativel com o .XML
-        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, contacts);
+                intent.putExtra("contato", contact);
 
-        //Adiciona na instancia do .XML o conteudo do adaptado
-        listaAlunos.setAdapter(adapter);
-
+                startActivity(intent);
+            }
+        });
 
         Button botao = (Button) findViewById(R.id.novo_aluno);
         botao.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +58,50 @@ public class ListaAlunosActivity extends AppCompatActivity {
             }
         });
 
+        registerForContextMenu(listaAlunos);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
+        MenuItem delete = menu.add("Deletar");  // Cria um menu de contexto e armazena sua referencia
+        delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){   //Cria um comportamento, interessado em saber quando foi clicado
+            @Override
+            public boolean onMenuItemClick(MenuItem item) { // Criar um comportamento para saber qual o nome do objeto clicado
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo; // o parametro menu info disponibiliza dados adicionais, neste caso, sabendo que a lista é um adapterContextMenuInfo, podemos saber a posicao
+                Contact contact = (Contact) listaAlunos.getItemAtPosition(info.position); //sabendo a posicao, perguntamos a lista o nome do elemento clicado
+
+                ContactServiceCaracteristics contactServiceImpl = new ContactService(ListaAlunosActivity.this);
+
+                contactServiceImpl.deleteContact(contact);
+
+                refreshList();
+
+                return false;
+
+            }
+        });
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    public void refreshList() {
+        ContactServiceCaracteristics contactServiceImpl = new ContactService(this);
+
+        List<Contact> contacts = contactServiceImpl.getAllContacts();
+        this.listaAlunos = (ListView) findViewById(R.id.lista_alunos); //Recebe uma instancia de um atributo view e converte em ListView
+
+        //Pega um array de string e adapata de tal forma que possa ser compativel com o .XML
+        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, contacts);
+
+        listaAlunos.setAdapter(adapter); //Adiciona na instancia do .XML o conteudo do adaptado
+    }
+
 }
 
 

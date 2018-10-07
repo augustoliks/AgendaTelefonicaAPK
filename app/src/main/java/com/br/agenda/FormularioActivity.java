@@ -22,11 +22,20 @@ import java.util.BitSet;
 public class FormularioActivity extends AppCompatActivity {
 
     ContactService contactService;
+    HelperFormulario helperFormulario;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);             // Preparando a instancia
         setContentView(R.layout.activity_formulario);   //  Instanciando o conteudo .XML em memoria
+        Intent intent = getIntent();
+
+        Contact contact = (Contact) intent.getSerializableExtra("contato");
+
+        if(contact != null){ // Null eh quando o usuario clica pra adicionar aluno,
+            new HelperFormulario(this).preencheFormulario(contact);
+        }
     }
 
     @Override
@@ -34,6 +43,8 @@ public class FormularioActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();       //carrega o top bar que esta vazio
         menuInflater.inflate(R.menu.menu_formulario, menu);  // insere o .XML do menu_formulario, agr temos uma configuracao de layout do top bar isolada
         return super.onCreateOptionsMenu(menu);
+
+
     }
 
     @Override
@@ -45,12 +56,19 @@ public class FormularioActivity extends AppCompatActivity {
 
                 ContactServiceCaracteristics contactServiceImpl = new ContactService(this);
 
-                contactServiceImpl.insertNewContact(contact);
+                if(contact.getId() != null){
+                    contactServiceImpl.updateContact(contact);
+                }
+                else{
+                    contactServiceImpl.insertNewContact(contact);
+                }
 
                 Toast.makeText(FormularioActivity.this,"Aluno " + contact.getName() + " Salvo", Toast.LENGTH_LONG).show(); //Criar um popup
 
                 finish();   //Finaliza a instancia
                 break;
+
+
         }
 
         return super.onOptionsItemSelected(item);

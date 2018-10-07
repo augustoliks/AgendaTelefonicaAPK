@@ -8,7 +8,9 @@ import java.util.List;
 public interface ContactServiceCaracteristics {
 
     public List<Contact> getAllContacts();
-    public boolean insertNewContact(Contact contact);
+    public void insertNewContact(Contact contact);
+    public void deleteContact(Contact contact);
+    public void updateContact(Contact contact);
 
 
 }

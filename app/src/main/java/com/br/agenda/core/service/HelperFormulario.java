@@ -18,6 +18,7 @@ public class HelperFormulario{
    // private final EditText campoNota;
     private final EditText campoSite;
     private final EditText campoTelefone;
+    Contact contact;
 
     public HelperFormulario(FormularioActivity activity) {
         this.campoNome = activity.findViewById(R.id.formulario_nome);
@@ -45,6 +46,13 @@ public class HelperFormulario{
         return contact;
     }
 
-
+    public void preencheFormulario(Contact contact)  {
+        campoNome.setText(contact.getName());
+        campoEndereco.setText(contact.getAddress());
+        campoTelefone.setText(contact.getTelephoneNumber());
+        campoSite.setText(contact.getSite());
+        //campoNota.setProgress(aluno.getNota().intValue());
+        this.contact = contact;
+    }
 
 }
