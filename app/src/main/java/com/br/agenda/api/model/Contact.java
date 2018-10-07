@@ -55,4 +55,9 @@ public class Contact {
     public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

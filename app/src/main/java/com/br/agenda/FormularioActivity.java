@@ -11,14 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.br.agenda.api.dao.ContactDAOCaracteristics;
+import com.br.agenda.api.model.Contact;
 import com.br.agenda.api.service.ContactServiceCaracteristics;
 import com.br.agenda.core.service.ContactService;
+import com.br.agenda.core.service.HelperFormulario;
 
 import java.util.BitSet;
 
 public class FormularioActivity extends AppCompatActivity {
 
-    ContactServiceCaracteristics contactService;
+    ContactService contactService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +41,13 @@ public class FormularioActivity extends AppCompatActivity {
         switch (item.getItemId()) {         //verifica o que foi clicado
             case R.id.menu_formulario_ok:   //se for o menu_formulario
 
-                contactService = new ContactService(this);
+                Contact contact = new HelperFormulario(FormularioActivity.this).getContact();
 
-                Toast.makeText(FormularioActivity.this,
-                        "Aluno " + contactService.getContact().getName() + " Salvo",
-                        Toast.LENGTH_LONG).show(); //Criar um popup
+                ContactServiceCaracteristics contactServiceImpl = new ContactService(this);
+
+                contactServiceImpl.insertNewContact(contact);
+
+                Toast.makeText(FormularioActivity.this,"Aluno " + contact.getName() + " Salvo", Toast.LENGTH_LONG).show(); //Criar um popup
 
                 finish();   //Finaliza a instancia
                 break;
