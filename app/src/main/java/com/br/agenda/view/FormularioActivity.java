@@ -33,8 +33,8 @@ import java.text.SimpleDateFormat;
 
 public class FormularioActivity extends AppCompatActivity {
     private static final String PACKAGE_PROVIDER = BuildConfig.APPLICATION_ID + ".provider"; // Pega o nome do pacote, e concatena com .provider
+
     private static final int COGIDO_CAMERA = 2;
-    ContactService contactService;
     HelperFormulario helperFormulario;
     private String pathPhoto;
 
@@ -42,10 +42,11 @@ public class FormularioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);             // Preparando a instancia
         setContentView(R.layout.activity_formulario);   //  Instanciando o conteudo .XML em memoria
-        final Intent intent = getIntent();
 
-        Contact contact = (Contact) intent.getSerializableExtra("contato");
         helperFormulario = new HelperFormulario(this);
+
+        Intent intent = getIntent();
+        Contact contact = (Contact) intent.getSerializableExtra("contato");
 
         if(contact != null){ // Null eh quando o usuario clica pra adicionar aluno,
             helperFormulario.preencheFormulario(contact);
@@ -84,16 +85,12 @@ public class FormularioActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK) {   // Verifica se o codigo da acao da activity foi OK, (botao 'X' cancelar, nao entra nesse if)
             if (requestCode == COGIDO_CAMERA) {  // verica se a acao eh oriunda da acao de acionamento da camera
-
                 if (data != null && data.getExtras() != null) {
                     helperFormulario.loadImage(pathPhoto);
                 }
             }
-
         }
     }
 
@@ -101,6 +98,7 @@ public class FormularioActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {     // Metodo que carrega o topbar
         MenuInflater menuInflater = getMenuInflater();       //carrega o top bar que esta vazio
         menuInflater.inflate(R.menu.menu_formulario, menu);  // insere o .XML do menu_formulario, agr temos uma configuracao de layout do top bar isolada
+
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -125,9 +123,7 @@ public class FormularioActivity extends AppCompatActivity {
 
                 finish();   //Finaliza a instancia
                 break;
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.provider.Browser;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +12,12 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.br.agenda.R;
+import com.br.agenda.adapter.ContactsAdapter;
 import com.br.agenda.api.model.Contact;
 import com.br.agenda.api.service.ContactServiceCaracteristics;
 import com.br.agenda.core.service.ContactService;
@@ -26,8 +25,7 @@ import com.br.agenda.core.service.ContactService;
 import java.util.List;
 
 public class ListaAlunosActivity extends AppCompatActivity {
-    private ListView listaAlunos;
-
+    private ListView listaAlunos;   // = (ListView) findViewById(R.id.lista_alunos); //Recebe uma instancia de um atributo view e converte em ListView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +50,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
         });
 
         Button botao = (Button) findViewById(R.id.novo_aluno);
+
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +70,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo; // o parametro menu info disponibiliza dados adicionais, neste caso, sabendo que a lista é um adapterContextMenuInfo, podemos saber a posicao
         final Contact contact = (Contact) listaAlunos.getItemAtPosition(info.position);
 
@@ -80,6 +81,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
         Intent intentSite = new Intent(Intent.ACTION_VIEW);
 
         String site = contact.getSite();
+
         if (!site.startsWith("https://")) {
             site = "https://" + site;
         }
@@ -104,13 +106,11 @@ public class ListaAlunosActivity extends AppCompatActivity {
                 Contact contact = (Contact) listaAlunos.getItemAtPosition(info.position); //sabendo a posicao, perguntamos a lista o nome do elemento clicado
 
                 ContactServiceCaracteristics contactServiceImpl = new ContactService(ListaAlunosActivity.this);
-
                 contactServiceImpl.deleteContact(contact);
 
                 refreshList();
 
                 return false;
-
             }
         });
 
@@ -133,18 +133,13 @@ public class ListaAlunosActivity extends AppCompatActivity {
             }
         });
 
-        //super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     public void refreshList() {
         ContactServiceCaracteristics contactServiceImpl = new ContactService(this);
-
         List<Contact> contacts = contactServiceImpl.getAllContacts();
-        this.listaAlunos = (ListView) findViewById(R.id.lista_alunos); //Recebe uma instancia de um atributo view e converte em ListView
 
-        //Pega um array de string e adapata de tal forma que possa ser compativel com o .XML
-        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, contacts);
-
+        ContactsAdapter adapter = new ContactsAdapter(this, contacts);
         listaAlunos.setAdapter(adapter); //Adiciona na instancia do .XML o conteudo do adaptado
     }
 

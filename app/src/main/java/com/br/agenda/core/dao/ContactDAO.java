@@ -75,7 +75,6 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
     public void delete(Contact contact) {
         SQLiteDatabase db = getWritableDatabase();
         String []params = {contact.getId().toString()};
-
         db.delete("Contato", "id = ?",params);
     }
 

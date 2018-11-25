@@ -10,7 +10,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="225dp">
+            android:layout_height="300dp">
 
             <Button
                 android:id="@+id/formulario_btn_camera"
@@ -24,7 +24,7 @@
             <ImageButton
                 android:id="@+id/formulario_foto"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="275dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="#00A8EC"
