@@ -16,18 +16,19 @@ import java.util.List;
 public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteristics {
 
     public ContactDAO(Context context){
-        super(context, "Agenda", null, 1);
+        super(context, "Agenda", null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE Contato(" +
-                "id INTEGER PRIMARY KEY," +
-                "nome TEXT NOT NULL," +
-                "endereco TEXT," +
-                "telefone TEXT," +
-                "site TEXT" +
-            //    "nota REAL" +
+        String sql = "CREATE TABLE " +
+                "Contato(" +
+                    "id INTEGER PRIMARY KEY," +
+                    "nome TEXT NOT NULL," +
+                    "endereco TEXT," +
+                    "telefone TEXT," +
+                    "site TEXT," +
+                    "caminhoFoto TEXT" +
                 ")";
 
         db.execSQL(sql);
@@ -35,9 +36,14 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS Contato";
-        db.execSQL(sql);
-        onCreate(db);
+        String sql = "";
+
+        switch (oldVersion){     // Nao tem break nos cases pq atualiza de forma cascata de acordo com a versao antiga
+            case 1:
+                sql = "ALTER TABLE Contato ADD COLUMN caminhoFoto TEXT";
+                db.execSQL(sql); // Atualizando pra versao 2
+        }
+
     }
 
     @Override
@@ -46,8 +52,6 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues contentValues = getContentValues(contact);
-//        contentValues.put("nota", contact.getRating());
-
         db.insert("Contato", null, contentValues);
 
         return true;
@@ -58,10 +62,11 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
     private ContentValues getContentValues(Contact contact) {
         ContentValues contentValues = new ContentValues();
 
-         contentValues.put("nome", contact.getName());
+        contentValues.put("nome", contact.getName());
         contentValues.put("endereco", contact.getAddress());
         contentValues.put("telefone", contact.getTelephoneNumber());
         contentValues.put("site", contact.getSite());
+        contentValues.put("caminhoFoto", contact.getPathRelativePhoto());
 
         return contentValues;
     }
@@ -72,7 +77,6 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
         String []params = {contact.getId().toString()};
 
         db.delete("Contato", "id = ?",params);
-
     }
 
     @Override
@@ -87,10 +91,10 @@ public class ContactDAO extends SQLiteOpenHelper implements ContactDAOCaracteris
             Contact contact = new Contact();
             contact.setId(cursor.getLong(cursor.getColumnIndex("id")));
             contact.setTelephoneNumber(cursor.getString(cursor.getColumnIndex("telefone")));
-//            contact.setRating();
             contact.setName(cursor.getString(cursor.getColumnIndex("nome")));
             contact.setAddress(cursor.getString(cursor.getColumnIndex("endereco")));
             contact.setSite(cursor.getString(cursor.getColumnIndex("site")));
+            contact.setPathRelativePhoto(cursor.getString(cursor.getColumnIndex("caminhoFoto")));
 
             contacts.add(contact);
       }

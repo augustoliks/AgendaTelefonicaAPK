@@ -9,6 +9,7 @@ public class Contact implements Serializable {
     private int rating;
     private String site;
     private String telephoneNumber;
+    private String pathRelativePhoto;
 
     public Long getId() {
         return id;
@@ -61,5 +62,13 @@ public class Contact implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String getPathRelativePhoto() {
+        return pathRelativePhoto;
+    }
+
+    public void setPathRelativePhoto(String pathRelativePhoto) {
+        this.pathRelativePhoto = pathRelativePhoto;
     }
 }
